@@ -1,5 +1,5 @@
 {
-  "name": "e-commerce-api",
+  "name": "e-commerce-aapi",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",

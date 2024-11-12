@@ -1,32 +1,17 @@
-import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import CustomerForm from './components/CustomerForm';
+import React from "react";
+import CustomerForm from "./components/Customer/CustomerForm";
+import CustomerDetails from "./components/Customer/CustomerDetails";
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedCustomerId: null,
-    };
-  }
-
-  handleCustomerSubmit = (formData) => {
-    console.log('Customer data submitted:', formData);
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>Customer Management</h1>
-        <Routes>
-          <Route
-            path='/create-customer'
-            element={<CustomerForm onSubmit={this.handleCustomerSubmit} />}
-          />
-        </Routes>
-      </div>
-    );
-  }
+function App() {
+  const customerId = null
+  return (
+    <div className="App">
+      <h1>Customer Information Form</h1>
+      <CustomerForm /> {/* Render the CustomerForm component */}
+      <CustomerDetails /> {/* Render the CustomerDetails component */}
+    </div>
+  );
 }
 
 export default App;
