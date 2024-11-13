@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { Button, Container } from "react-bootstrap"; // Import Bootstrap components
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CustomerDetails({ customerId }) {
+function CustomerDetails() {
+  const { customerId } = useParams();
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch customer details from the backend
     const fetchCustomerDetails = async () => {
       try {
         const response = await axios.get(`/api/customers/${customerId}`);
@@ -18,30 +21,34 @@ function CustomerDetails({ customerId }) {
         setLoading(false);
       }
     };
-
     fetchCustomerDetails();
   }, [customerId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/customers/${customerId}`);
+      alert("Customer deleted successfully");
+      navigate("/customers");
+    } catch (error) {
+      alert("Failed to delete customer.");
+    }
+  };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <div>
+    <Container className="mt-4">
       <h3>Customer Details</h3>
       {customer && (
         <div>
           <p><strong>Name:</strong> {customer.name}</p>
           <p><strong>Email:</strong> {customer.email}</p>
           <p><strong>Phone:</strong> {customer.phone}</p>
-          {/* You can add more fields as needed */}
+          <Button variant="danger" onClick={handleDelete}>Delete Customer</Button>
         </div>
       )}
-    </div>
+    </Container>
   );
 }
 

@@ -1,16 +1,19 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import CustomerForm from "./components/Customer/CustomerForm";
 import CustomerDetails from "./components/Customer/CustomerDetails";
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import CustomerUpdateForm from "./components/Customer/UpdateCustomer";
 
 function App() {
-  const customerId = null
   return (
-    <div className="App">
-      <h1>Customer Information Form</h1>
-      <CustomerForm /> {/* Render the CustomerForm component */}
-      <CustomerDetails /> {/* Render the CustomerDetails component */}
-    </div>
+      <Container>
+        <Routes>
+          <Route path="/add-customer" element={<CustomerForm />} />
+          <Route path="/customer/:customerId" element={<CustomerDetails />} />
+          <Route path="/customer/:customerId/update" element={<CustomerUpdateForm />} />
+        </Routes>
+      </Container>
   );
 }
 
