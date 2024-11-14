@@ -1,65 +1,47 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import ConfirmationModal from "./ProductConfirmation";
-
+import React, { useEffect, useState } from "react"; // Import necessary hooks
+import axios from "axios"; // For making HTTP requests
+import { Container, Button } from "react-bootstrap"; // Bootstrap components
+import { useParams, useNavigate } from "react-router-dom"; // For accessing route params and navigation
 
 function ProductDetails() {
-  const [product, setProduct] = useState(null);
-  const [error, setError] = useState(null);
-  const { productId } = useParams();
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false)
+  const [product, setProduct] = useState(null); // State to store product details
+  const [loading, setLoading] = useState(true); // State to manage loading indicator
+  const [error, setError] = useState(null); // State for error handling
+  const { productId } = useParams(); // Access productId from the URL
+  const navigate = useNavigate(); // Navigation hook to go back to the product list page
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
-        setProduct(response.data);
-      } catch (error) {
-        setError("Failed to load product details.");
+        setProduct(response.data); // Set product details
+      } catch (err) {
+        setError("Error loading product details."); // Handle error if product fetch fails
+      } finally {
+        setLoading(false); // Stop loading state after API call is complete
       }
     };
-    fetchProduct();
+    fetchProduct(); // Fetch product details on component mount
   }, [productId]);
 
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`http://localhost:5000/api/products/${productId}`);
-      navigate("/products");
-    } catch (err) {
-      setError("Failed to delete product.");
-    }
-  };
+  if (loading) {
+    return <p>Loading...</p>; // Show loading message while fetching data
+  }
 
-  const handleModalClose = () => setShowModal(false);  // Close the modal
-  const handleModalConfirm = () => {
-    handleDelete();  // Proceed with delete
-    handleModalClose();  // Close the modal after confirming
-  };
+  if (error) {
+    return <p style={{ color: "red" }}>{error}</p>; // Display error message
+  }
 
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-
-  return product ? (
-    <div>
-      <h2>Product Details</h2>
-      <p>Name: {product.name}</p>
+  return (
+    <Container className="mt-4">
+      <h2>{product.name}</h2>
       <p>Price: ${product.price}</p>
-
-      <Button variant="danger" onClick={() => setShowModal(true)} >
-        Delete Product
+      <p>Description: {product.description}</p>
+      {/* Button to navigate back to the product list */}
+      <Button variant="secondary" onClick={() => navigate("/products")}>
+        Back to Product List
       </Button>
-
-      <ConfirmationModal
-        show={showModal}
-        onConfirm={handleModalConfirm}
-        onCancel={handleModalClose} 
-      
-      />
-    </div>
-  ) : (
-    <p>Loading...</p>
+    </Container>
   );
 }
 

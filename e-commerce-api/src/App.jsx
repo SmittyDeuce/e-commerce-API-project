@@ -8,6 +8,7 @@ import ProductList from "./components/Products/ProductList"; // New Component fo
 import ProductForm from "./components/Products/ProductForm";
 import ProductDetails from "./components/Products/ProductDetails";
 import ProductUpdate from "./components/Products/UpdateProduct";
+import OrderForm from "./components/Order/OrderForm";
 function App() {
   return (
     <Container>
@@ -22,6 +23,8 @@ function App() {
         <Route path="/products" element={<ProductList />} /> {/* New route for listing products */}
         <Route path="/product/:productId" element={<ProductDetails />} /> {/* New route for product details */}
         <Route path="/product/:productId/update" element={<ProductUpdate />} /> {/* New route for updating product */}
+
+        <Route path="/place-order" element={<OrderForm />} />
       </Routes>
     </Container>
   );
